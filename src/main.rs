@@ -21,17 +21,16 @@ fn main() -> Result<()> {
         Err(_) => return Err(anyhow!("Not set GITHUB_USERNAME")),
     };
 
-    let current_dirs_result = env::current_dir()?;
-    let current_dirs = current_dirs_result.to_str().unwrap();
-    let mut current_dirs_vec = current_dirs.split('/').collect::<Vec<&str>>();
-    current_dirs_vec.reverse();
-    let current_dir = current_dirs_vec[0];
+    let current_dir_result = env::current_dir()?;
+    let mut dirs_vec = current_dir_result.to_str().unwrap().split('/').collect::<Vec<&str>>();
+    dirs_vec.reverse();
+    let current_dir = dirs_vec[0];
 
     let result = std::fs::read_dir(".github/workflows");
     let files = match result {
         Ok(files) => files,
-        Err(err) => {
-            return Err(err.into());
+        Err(_) => {
+            return Err(anyhow!("Not found .github/workflows"));
         }
     };
 
