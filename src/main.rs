@@ -37,7 +37,7 @@ fn main() -> Result<()> {
     let withlink = matches.is_present("withlink");
     let github_name = matches.value_of("githubname").unwrap_or("");
 
-    let github_username = if github_name == "" {
+    let github_username = if github_name.is_empty() {
         match env::var("GITHUB_USERNAME") {
             Ok(val) => val,
             Err(_) => return Err(anyhow!("Not set GITHUB_USERNAME")),
