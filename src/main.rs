@@ -3,7 +3,13 @@ use clap::{Arg, Command};
 use std::env;
 
 #[allow(unused_must_use)]
-fn write_badge_text(github_username: &str, file_name: &str, current_dir: &str, withlink: bool, mut writer: impl std::io::Write) {
+fn write_badge_text(
+    github_username: &str,
+    file_name: &str,
+    current_dir: &str,
+    withlink: bool,
+    mut writer: impl std::io::Write,
+) {
     if file_name.ends_with(".yml") {
         if withlink {
             let s = format!("[![action](https://github.com/{github_username}/{repo_name}/actions/workflows/{action_file}/badge.svg)](https://github.com/{github_username}/{repo_name}/actions)", github_username=github_username, repo_name=current_dir, action_file=file_name);
@@ -47,7 +53,11 @@ fn main() -> Result<()> {
     };
 
     let current_dir_result = env::current_dir()?;
-    let mut dirs_vec = current_dir_result.to_str().unwrap().split('/').collect::<Vec<&str>>();
+    let mut dirs_vec = current_dir_result
+        .to_str()
+        .unwrap()
+        .split('/')
+        .collect::<Vec<&str>>();
     dirs_vec.reverse();
     let current_dir = dirs_vec[0];
 
@@ -63,7 +73,13 @@ fn main() -> Result<()> {
         let file = file.unwrap();
         let file_name = file.file_name();
         let file_name = file_name.to_str().unwrap();
-        write_badge_text(&github_username, file_name, current_dir, withlink, &mut std::io::stdout());
+        write_badge_text(
+            &github_username,
+            file_name,
+            current_dir,
+            withlink,
+            &mut std::io::stdout(),
+        );
     }
 
     Ok(())
@@ -82,5 +98,8 @@ fn test_write_badge_text_without_link() {
     let mut writer = Vec::new();
     write_badge_text("sample", "test.yml", "test", false, &mut writer);
     let s = String::from_utf8(writer).unwrap();
-    assert_eq!(s, "![action](https://github.com/sample/test/actions/workflows/test.yml/badge.svg)\n");
+    assert_eq!(
+        s,
+        "![action](https://github.com/sample/test/actions/workflows/test.yml/badge.svg)\n"
+    );
 }
