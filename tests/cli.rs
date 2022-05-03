@@ -28,7 +28,8 @@ fn not_found_github_directory() -> Result<(), Box<dyn std::error::Error>> {
     cmd.current_dir("/tmp");
     cmd.arg("-n").arg("sample");
     cmd.assert().failure();
-    cmd.assert().stderr(predicate::str::contains("Not found .github/workflows"));
+    cmd.assert()
+        .stderr(predicate::str::contains("Not found .github/workflows"));
 
     Ok(())
 }
@@ -37,7 +38,8 @@ fn not_found_github_directory() -> Result<(), Box<dyn std::error::Error>> {
 fn not_set_github_username() -> Result<(), Box<dyn std::error::Error>> {
     let mut cmd = Command::cargo_bin("gha-badge")?;
     cmd.assert().failure();
-    cmd.assert().stderr(predicate::str::contains("Not set GITHUB_USERNAME"));
+    cmd.assert()
+        .stderr(predicate::str::contains("Not set GITHUB_USERNAME"));
 
     Ok(())
 }
