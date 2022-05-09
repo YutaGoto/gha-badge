@@ -3,7 +3,8 @@ name: Clippy check
 permissions:
   pull-requests: write
   contents: write
-  
+  repository-projects: write
+
 jobs:
   lint:
     runs-on: ubuntu-latest
