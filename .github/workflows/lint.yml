@@ -2,7 +2,8 @@ on: push
 name: Clippy check
 permissions:
   pull-requests: write
-
+  contents: write
+  
 jobs:
   lint:
     runs-on: ubuntu-latest
