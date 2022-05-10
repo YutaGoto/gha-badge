@@ -9,7 +9,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-          components: clippy
+          components: rustfmt
           override: true
       - name: run rustfmt
         uses: actions-rs/cargo@v1
