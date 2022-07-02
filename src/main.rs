@@ -42,7 +42,9 @@ fn main() -> Result<()> {
         .get_matches();
 
     let withlink = matches.contains_id("withlink");
-    let github_name = matches.remove_one::<String>("githubname").unwrap_or("".to_string());
+    let github_name = matches
+        .remove_one::<String>("githubname")
+        .unwrap_or_else(|| "".to_string());
 
     let github_username = if github_name.is_empty() {
         match env::var("GITHUB_USERNAME") {
@@ -50,7 +52,7 @@ fn main() -> Result<()> {
             Err(_) => return Err(anyhow!("Not set GITHUB_USERNAME")),
         }
     } else {
-        github_name.to_string()
+        github_name
     };
 
     let current_dir_result = env::current_dir()?;
