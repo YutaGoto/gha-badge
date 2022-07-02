@@ -22,7 +22,7 @@ fn write_badge_text(
 }
 
 fn main() -> Result<()> {
-    let matches = Command::new("GitHub Actions Badge")
+    let mut matches = Command::new("GitHub Actions Badge")
         .version("0.1.0")
         .author("YutaGoto <sample@example.com>")
         .about("Generate GitHub Actions Badge for Markdown")
@@ -36,12 +36,13 @@ fn main() -> Result<()> {
                 .long("github-name")
                 .short('n')
                 .takes_value(true)
-                .help("GitHub user name"),
+                .help("GitHub user name")
+                .required(false),
         )
         .get_matches();
 
-    let withlink = matches.is_present("withlink");
-    let github_name = matches.value_of("githubname").unwrap_or("");
+    let withlink = matches.contains_id("withlink");
+    let github_name = matches.remove_one::<String>("githubname").unwrap_or("".to_string());
 
     let github_username = if github_name.is_empty() {
         match env::var("GITHUB_USERNAME") {
