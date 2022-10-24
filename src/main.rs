@@ -43,8 +43,7 @@ fn main() -> Result<()> {
 
     let withlink = matches.contains_id("withlink");
     let github_name = matches
-        .remove_one::<String>("githubname")
-        .unwrap_or_else(|| "".to_string());
+        .remove_one::<String>("githubname").unwrap_or_default();
 
     let github_username = if github_name.is_empty() {
         match env::var("GITHUB_USERNAME") {
