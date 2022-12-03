@@ -17,11 +17,11 @@ fn write_badge_text(
 ) {
     if file_name.ends_with(".yml") {
         if withlink {
-            let s = format!("[![action](https://github.com/{github_username}/{repo_name}/actions/workflows/{action_file}/badge.svg)](https://github.com/{github_username}/{repo_name}/actions)", github_username=github_username, repo_name=current_dir, action_file=file_name);
-            writeln!(writer, "{}", s);
+            let s = format!("[![action](https://github.com/{github_username}/{current_dir}/actions/workflows/{file_name}/badge.svg)](https://github.com/{github_username}/{current_dir}/actions)");
+            writeln!(writer, "{s}");
         } else {
-            let s = format!("![action](https://github.com/{github_username}/{repo_name}/actions/workflows/{action_file}/badge.svg)", github_username=github_username, repo_name=current_dir, action_file=file_name);
-            writeln!(writer, "{}", s);
+            let s = format!("![action](https://github.com/{github_username}/{current_dir}/actions/workflows/{file_name}/badge.svg)");
+            writeln!(writer, "{s}");
         }
     }
 }
