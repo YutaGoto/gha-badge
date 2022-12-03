@@ -1,6 +1,11 @@
 use anyhow::{anyhow, Result};
 use clap::{Arg, Command};
 use std::env;
+use std::fs::File;
+use std::io::{self, BufRead};
+use std::path::Path;
+
+extern crate dirs;
 
 #[allow(unused_must_use)]
 fn write_badge_text(
@@ -19,6 +24,14 @@ fn write_badge_text(
             writeln!(writer, "{}", s);
         }
     }
+}
+
+fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+where
+    P: AsRef<Path>,
+{
+    let file = File::open(filename)?;
+    Ok(io::BufReader::new(file).lines())
 }
 
 fn main() -> Result<()> {
@@ -41,6 +54,31 @@ fn main() -> Result<()> {
         )
         .get_matches();
 
+    let home_dir_buf = match dirs::home_dir() {
+        Some(k) => k,
+        None => return Err(anyhow!("error to load home dir")),
+    };
+
+    let home_dir = match home_dir_buf.to_str() {
+        Some(d) => d,
+        None => return Err(anyhow!("error to convert str")),
+    };
+
+    let mut read_file = home_dir.to_string();
+    read_file.push_str("/.gitconfig");
+
+    let mut config_user = "".to_string();
+
+    if let Ok(lines) = read_lines(read_file) {
+        for line in lines {
+            if let Ok(name) = line {
+                if name.contains("name =") {
+                    config_user = name.trim().replace("name = ", "")
+                }
+            }
+        }
+    }
+
     let withlink = matches.contains_id("withlink");
     let github_name = matches
         .remove_one::<String>("githubname")
@@ -51,6 +89,8 @@ fn main() -> Result<()> {
             Ok(val) => val,
             Err(_) => return Err(anyhow!("Not set GITHUB_USERNAME")),
         }
+    } else if !config_user.is_empty() {
+        config_user
     } else {
         github_name
     };
