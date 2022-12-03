@@ -70,11 +70,9 @@ fn main() -> Result<()> {
     let mut config_user = "".to_string();
 
     if let Ok(lines) = read_lines(read_file) {
-        for line in lines {
-            if let Ok(name) = line {
-                if name.contains("name =") {
-                    config_user = name.trim().replace("name = ", "")
-                }
+        for line in lines.into_iter().flatten() {
+            if line.contains("name =") {
+                config_user = line.trim().replace("name = ", "")
             }
         }
     }
