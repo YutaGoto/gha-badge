@@ -82,13 +82,13 @@ fn main() -> Result<()> {
         .remove_one::<String>("githubname")
         .unwrap_or_default();
 
-    let github_username = if github_name.is_empty() {
+    let github_username = if !config_user.is_empty() {
+        config_user
+    } else if github_name.is_empty() {
         match env::var("GITHUB_USERNAME") {
             Ok(val) => val,
             Err(_) => return Err(anyhow!("Not set GITHUB_USERNAME")),
         }
-    } else if !config_user.is_empty() {
-        config_user
     } else {
         github_name
     };
