@@ -36,8 +36,8 @@ where
 
 fn main() -> Result<()> {
     let mut matches = Command::new("GitHub Actions Badge")
-        .version("0.1.0")
-        .author("YutaGoto <sample@example.com>")
+        .version("0.2.0")
+        .author("YutaGoto <yutagoto@gmail.com>")
         .about("Generate GitHub Actions Badge for Markdown")
         .arg(
             Arg::new("withlink")
@@ -56,7 +56,7 @@ fn main() -> Result<()> {
 
     let home_dir_buf = match dirs::home_dir() {
         Some(k) => k,
-        None => return Err(anyhow!("error to load home dir")),
+        None => return Err(anyhow!("error while load home dir")),
     };
 
     let home_dir = match home_dir_buf.to_str() {
