@@ -36,7 +36,7 @@ where
 
 fn main() -> Result<()> {
     let mut matches = Command::new("GitHub Actions Badge")
-        .version("0.2.0")
+        .version("0.3.0")
         .author("YutaGoto <yutagoto@gmail.com>")
         .about("Generate GitHub Actions Badge for Markdown")
         .arg(
@@ -70,7 +70,7 @@ fn main() -> Result<()> {
     let mut config_user = "".to_string();
 
     if let Ok(lines) = read_lines(read_file) {
-        for line in lines.into_iter().flatten() {
+        for line in lines.into_iter().map_while(Result::ok) {
             if line.contains("name =") {
                 config_user = line.trim().replace("name = ", "")
             }
