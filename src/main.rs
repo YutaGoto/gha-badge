@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use clap::{Arg, Command};
+use clap::{Arg, ArgAction, Command};
 use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
@@ -41,14 +41,17 @@ fn main() -> Result<()> {
         .about("Generate GitHub Actions Badge for Markdown")
         .arg(
             Arg::new("withlink")
+                .action(ArgAction::SetFalse)
                 .long("with-link")
+                .required(false)
                 .help("Generate link to GitHub Actions with action URL"),
         )
         .arg(
             Arg::new("githubname")
+                .action(ArgAction::Set)
                 .long("github-name")
                 .short('n')
-                .num_args(0..=1)
+                .num_args(1)
                 .help("GitHub user name")
                 .required(false),
         )
@@ -82,15 +85,15 @@ fn main() -> Result<()> {
         .remove_one::<String>("githubname")
         .unwrap_or_default();
 
-    let github_username = if !config_user.is_empty() {
+    let github_username = if !github_name.is_empty() {
+        github_name
+    } else if !config_user.is_empty() {
         config_user
-    } else if github_name.is_empty() {
+    } else {
         match env::var("GITHUB_USERNAME") {
             Ok(val) => val,
             Err(_) => return Err(anyhow!("Not set GITHUB_USERNAME")),
         }
-    } else {
-        github_name
     };
 
     let current_dir_result = env::current_dir()?;
