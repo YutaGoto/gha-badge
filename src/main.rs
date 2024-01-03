@@ -48,7 +48,7 @@ fn main() -> Result<()> {
             Arg::new("githubname")
                 .long("github-name")
                 .short('n')
-                .takes_value(true)
+                .num_args(0..=1)
                 .help("GitHub user name")
                 .required(false),
         )
